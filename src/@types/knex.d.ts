@@ -17,6 +17,7 @@ declare module 'knex/types/tables' {
       id: string
       name: string
       email: string
+      password: string
       session_id?: string
       created_at: string
     }
