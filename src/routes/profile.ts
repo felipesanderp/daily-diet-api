@@ -3,7 +3,7 @@ import { FastifyInstance } from 'fastify'
 import { knex } from '../database'
 import { checkSessionIdExists } from '../middlewares/check-session-id-exists'
 
-export async function usersRoutes(app: FastifyInstance) {
+export async function profileRoutes(app: FastifyInstance) {
   app.get(
     '/',
     {
