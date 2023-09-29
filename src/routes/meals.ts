@@ -85,6 +85,55 @@ export async function mealsRoutes(app: FastifyInstance) {
     },
   )
 
+  app.put(
+    '/:id',
+    { preHandler: [checkSessionIdExists] },
+    async (request, response) => {
+      const updateMealParamsSchema = z.object({
+        id: z.string().uuid(),
+      })
+
+      const params = updateMealParamsSchema.parse(request.params)
+
+      const { sessionId } = request.cookies
+
+      const [user] = await knex('users')
+        .where('session_id', sessionId)
+        .select('id')
+
+      const editMealBodySchema = z.object({
+        name: z.string().optional(),
+        description: z.string().optional(),
+        mealDate: z.string().optional(),
+        mealHour: z.string().optional(),
+        isOnTheDiet: z.boolean().optional(),
+      })
+
+      const { name, description, mealDate, mealHour, isOnTheDiet } =
+        editMealBodySchema.parse(request.body)
+
+      const meal = await knex('meals')
+        .where('id', params.id)
+        .andWhere('user_id', user.id)
+        .first()
+        .update({
+          name,
+          description,
+          mealDate,
+          mealHour,
+          isOnTheDiet,
+        })
+
+      if (!meal) {
+        return response.status(401).send({
+          error: 'Meal not found!',
+        })
+      }
+
+      return response.status(202).send()
+    },
+  )
+
   app.delete(
     '/:id',
     { preHandler: [checkSessionIdExists] },
