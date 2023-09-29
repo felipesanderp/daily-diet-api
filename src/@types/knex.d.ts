@@ -13,5 +13,12 @@ declare module 'knex/types/tables' {
       isOnTheDiet: boolean
       created_at: string
     }
+    users: {
+      id: string
+      name: string
+      email: string
+      session_id?: string
+      created_at: string
+    }
   }
 }
