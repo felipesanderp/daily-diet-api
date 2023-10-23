@@ -12,7 +12,14 @@ export async function mealsRoutes(app: FastifyInstance) {
       .where('session_id', sessionId)
       .select('id')
 
-    const meals = await knex('meals').where('user_id', user.id).select()
+    const meals = await knex('meals')
+      .where('user_id', user.id)
+      .select(
+        knex.raw(
+          'user_id, name, description, isOnTheDiet, DATE(mealDate) as date',
+        ),
+      )
+      .groupByRaw(`DATE(mealDate)`)
 
     return { meals }
   })
@@ -31,11 +38,10 @@ export async function mealsRoutes(app: FastifyInstance) {
         name: z.string(),
         description: z.string(),
         mealDate: z.string(),
-        mealHour: z.string(),
         isOnTheDiet: z.boolean(),
       })
 
-      const { name, description, mealDate, mealHour, isOnTheDiet } =
+      const { name, description, mealDate, isOnTheDiet } =
         createMealBodySchema.parse(request.body)
 
       await knex('meals').insert({
@@ -44,7 +50,6 @@ export async function mealsRoutes(app: FastifyInstance) {
         user_id: user.id,
         description,
         mealDate,
-        mealHour,
         isOnTheDiet,
       })
 
@@ -105,11 +110,10 @@ export async function mealsRoutes(app: FastifyInstance) {
         name: z.string().optional(),
         description: z.string().optional(),
         mealDate: z.string().optional(),
-        mealHour: z.string().optional(),
         isOnTheDiet: z.boolean().optional(),
       })
 
-      const { name, description, mealDate, mealHour, isOnTheDiet } =
+      const { name, description, mealDate, isOnTheDiet } =
         editMealBodySchema.parse(request.body)
 
       const meal = await knex('meals')
@@ -120,7 +124,6 @@ export async function mealsRoutes(app: FastifyInstance) {
           name,
           description,
           mealDate,
-          mealHour,
           isOnTheDiet,
         })
 
