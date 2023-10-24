@@ -12,14 +12,7 @@ export async function mealsRoutes(app: FastifyInstance) {
       .where('session_id', sessionId)
       .select('id')
 
-    const meals = await knex('meals')
-      .where('user_id', user.id)
-      .select(
-        knex.raw(
-          'user_id, name, description, isOnTheDiet, DATE(mealDate) as date',
-        ),
-      )
-      .groupByRaw(`DATE(mealDate)`)
+    const meals = await knex('meals').where('user_id', user.id).select()
 
     return { meals }
   })
