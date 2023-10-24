@@ -158,15 +158,13 @@ export async function mealsRoutes(app: FastifyInstance) {
       .andWhere('user_id', user.id)
 
     const summary = {
-      'Total de refeições registradas': parseInt(
+      totalMeals: parseInt(
         JSON.parse(JSON.stringify(count))['Total de refeições registradas'],
       ),
 
-      'Total de refeições dentro da dieta': parseInt(
-        JSON.parse(JSON.stringify(refOnDiet))[0].onDiet,
-      ),
+      totalOnTheDiet: parseInt(JSON.parse(JSON.stringify(refOnDiet))[0].onDiet),
 
-      'Total de refeições fora da dieta': parseInt(
+      totalOutsideTheDiet: parseInt(
         JSON.parse(JSON.stringify(refOutsideDiet))[0].outsideDiet,
       ),
     }

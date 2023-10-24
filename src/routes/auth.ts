@@ -41,6 +41,7 @@ export async function authRoutes(app: FastifyInstance) {
 
       return reply.status(200).send({
         token,
+        user,
       })
     } catch (err) {
       return reply.status(400).send()
