@@ -1,20 +1,18 @@
 import { FastifyInstance } from 'fastify'
 import { z } from 'zod'
 import { knex } from '../database'
-import { checkSessionIdExists } from '../middlewares/check-session-id-exists'
 import { hash } from 'bcrypt'
+import { verifyJWT } from '../middlewares/verify-jwt'
 
 export async function profileRoutes(app: FastifyInstance) {
   app.get(
     '/',
     {
-      preHandler: [checkSessionIdExists],
+      onRequest: [verifyJWT],
     },
     async (request) => {
-      const { sessionId } = request.cookies
-
       const [user] = await knex('users')
-        .where('session_id', sessionId)
+        .where('id', request.user.sub)
         .select('id', 'name', 'email')
 
       return {
@@ -25,10 +23,10 @@ export async function profileRoutes(app: FastifyInstance) {
 
   app.put(
     '/',
-    { preHandler: [checkSessionIdExists] },
+    {
+      onRequest: [verifyJWT],
+    },
     async (request, response) => {
-      const { sessionId } = request.cookies
-
       const editProfileBodySchema = z.object({
         name: z.string().optional(),
         email: z.string().email().optional(),
@@ -42,14 +40,14 @@ export async function profileRoutes(app: FastifyInstance) {
       if (password) {
         const passwordHash = await hash(password, 10)
 
-        await knex('users').where('session_id', sessionId).update({
+        await knex('users').where('id', request.user.sub).update({
           password: passwordHash,
         })
 
         return response.status(202).send()
       }
 
-      await knex('users').where('session_id', sessionId).update({
+      await knex('users').where('id', request.user.sub).update({
         name,
         email,
       })
