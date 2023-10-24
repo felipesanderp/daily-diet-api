@@ -47,7 +47,7 @@ export async function authRoutes(app: FastifyInstance) {
       await knex('users').where('id', user.id).update('session_id', sessionId)
     }
 
-    return response.status(201).send()
+    return response.status(200).send()
   })
 
   app.post('/register', async (request, response) => {

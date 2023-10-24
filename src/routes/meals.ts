@@ -5,14 +5,14 @@ import { knex } from '../database'
 import { checkSessionIdExists } from '../middlewares/check-session-id-exists'
 
 export async function mealsRoutes(app: FastifyInstance) {
-  app.get('/', { preHandler: [checkSessionIdExists] }, async (request) => {
-    const { sessionId } = request.cookies
+  app.get('/', async (request) => {
+    // const { sessionId } = request.cookies
 
-    const [user] = await knex('users')
-      .where('session_id', sessionId)
-      .select('id')
+    // const [user] = await knex('users')
+    //   .where('session_id', sessionId)
+    //   .select('id')
 
-    const meals = await knex('meals').where('user_id', user.id).select()
+    const meals = await knex('meals').select()
 
     return { meals }
   })
