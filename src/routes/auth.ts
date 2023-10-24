@@ -5,7 +5,7 @@ import { knex } from '../database'
 import { compare, hash } from 'bcrypt'
 
 export async function authRoutes(app: FastifyInstance) {
-  app.post('/login', async (request, response) => {
+  app.post('/login', async (request, reply) => {
     const loginBodySchema = z.object({
       email: z.string().email(),
       password: z.string(),
@@ -16,7 +16,7 @@ export async function authRoutes(app: FastifyInstance) {
     const user = await knex('users').where('email', email).select('*').first()
 
     if (!user) {
-      return response.status(401).send({
+      return reply.status(401).send({
         error: 'Check your e-mail or password!',
       })
     }
@@ -24,30 +24,45 @@ export async function authRoutes(app: FastifyInstance) {
     const comparePassword = await compare(password, user.password)
 
     if (!comparePassword) {
-      return response.status(401).send({
+      return reply.status(401).send({
         error: 'Check your e-mail or password!',
       })
     }
 
-    let sessionId = user.session_id
+    try {
+      const token = await reply.jwtSign(
+        {},
+        {
+          sign: {
+            sub: user.id,
+          },
+        },
+      )
 
-    if (sessionId) {
-      response.cookie('sessionId', sessionId, {
-        path: '/',
-        maxAge: 1000 * 60 * 60 * 24 * 7, // 7 Days
-      })
-    } else {
-      sessionId = randomUUID()
+      const refreshToken = await reply.jwtSign(
+        {},
+        {
+          sign: {
+            sub: user.id,
+            expiresIn: '7d',
+          },
+        },
+      )
 
-      response.cookie('sessionId', sessionId, {
-        path: '/',
-        maxAge: 1000 * 60 * 60 * 24 * 7, // 7 Days
-      })
-
-      await knex('users').where('id', user.id).update('session_id', sessionId)
+      return reply
+        .setCookie('refreshToken', refreshToken, {
+          path: '/',
+          secure: true,
+          sameSite: true,
+          httpOnly: true,
+        })
+        .status(200)
+        .send({
+          token,
+        })
+    } catch (err) {
+      return reply.status(400).send()
     }
-
-    return response.status(200).send()
   })
 
   app.post('/register', async (request, response) => {

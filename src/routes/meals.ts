@@ -3,16 +3,15 @@ import { randomUUID } from 'node:crypto'
 import { z } from 'zod'
 import { knex } from '../database'
 import { checkSessionIdExists } from '../middlewares/check-session-id-exists'
+import { verifyJWT } from '../middlewares/verify-jwt'
 
 export async function mealsRoutes(app: FastifyInstance) {
-  app.get('/', async (request) => {
-    // const { sessionId } = request.cookies
+  app.get('/', { onRequest: [verifyJWT] }, async (request) => {
+    const [user] = await knex('users')
+      .where('id', request.user.sub)
+      .select('id')
 
-    // const [user] = await knex('users')
-    //   .where('session_id', sessionId)
-    //   .select('id')
-
-    const meals = await knex('meals').select()
+    const meals = await knex('meals').select().where('user_id', user.id)
 
     return { meals }
   })
