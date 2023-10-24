@@ -39,27 +39,9 @@ export async function authRoutes(app: FastifyInstance) {
         },
       )
 
-      const refreshToken = await reply.jwtSign(
-        {},
-        {
-          sign: {
-            sub: user.id,
-            expiresIn: '7d',
-          },
-        },
-      )
-
-      return reply
-        .setCookie('refreshToken', refreshToken, {
-          path: '/',
-          secure: true,
-          sameSite: true,
-          httpOnly: true,
-        })
-        .status(200)
-        .send({
-          token,
-        })
+      return reply.status(200).send({
+        token,
+      })
     } catch (err) {
       return reply.status(400).send()
     }
