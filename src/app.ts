@@ -1,37 +1,37 @@
-import fastify from 'fastify'
-import cookie from '@fastify/cookie'
-import cors from '@fastify/cors'
-import fastifyJwt from '@fastify/jwt'
+import fastify from "fastify";
+import cookie from "@fastify/cookie";
+import cors from "@fastify/cors";
+import fastifyJwt from "@fastify/jwt";
 
-import { mealsRoutes } from './routes/meals'
-import { profileRoutes } from './routes/profile'
-import { authRoutes } from './routes/auth'
-import { env } from './env'
+import { mealsRoutes } from "./routes/meals";
+import { profileRoutes } from "./routes/profile";
+import { authRoutes } from "./routes/auth";
+import { env } from "./env";
 
-export const app = fastify()
+export const app = fastify();
 
 app.register(cors, {
-  origin: ['http://localhost:5173'],
-  methods: ['GET,PUT,POST,PATCH,DELETE'],
-})
+  origin: ["http://localhost:5173"],
+  methods: ["GET,PUT,POST,PATCH,DELETE"],
+});
 
 app.register(fastifyJwt, {
   secret: env.JWT_SECRET,
   sign: {
-    expiresIn: '7d',
+    expiresIn: "7d",
   },
-})
+});
 
-app.register(cookie)
+app.register(cookie);
 
 app.register(authRoutes, {
-  prefix: 'auth',
-})
+  prefix: "auth",
+});
 
 app.register(mealsRoutes, {
-  prefix: 'meals',
-})
+  prefix: "meals",
+});
 
 app.register(profileRoutes, {
-  prefix: 'profile',
-})
+  prefix: "profile",
+});
