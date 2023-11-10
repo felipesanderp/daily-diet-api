@@ -1,22 +1,22 @@
 import { FastifyInstance } from 'fastify'
 import { randomUUID } from 'node:crypto'
 import { z } from 'zod'
-import { knex } from '../database'
+import { knexConn } from '../database'
 import { verifyJWT } from '../middlewares/verify-jwt'
 
 export async function mealsRoutes(app: FastifyInstance) {
   app.get('/', { onRequest: [verifyJWT] }, async (request) => {
-    const [user] = await knex('users')
+    const [user] = await knexConn('users')
       .where('id', request.user.sub)
       .select('id')
 
-    const meals = await knex('meals').select().where('user_id', user.id)
+    const meals = await knexConn('meals').select().where('user_id', user.id)
 
     return { meals }
   })
 
   app.post('/', { onRequest: [verifyJWT] }, async (request, response) => {
-    const [user] = await knex('users')
+    const [user] = await knexConn('users')
       .where('id', request.user.sub)
       .select('id')
 
@@ -24,18 +24,20 @@ export async function mealsRoutes(app: FastifyInstance) {
       name: z.string(),
       description: z.string(),
       mealDate: z.string(),
+      mealHour: z.string(),
       isOnTheDiet: z.boolean(),
     })
 
-    const { name, description, mealDate, isOnTheDiet } =
+    const { name, description, mealDate, mealHour, isOnTheDiet } =
       createMealBodySchema.parse(request.body)
 
-    await knex('meals').insert({
+    await knexConn('meals').insert({
       id: randomUUID(),
       name,
       user_id: user.id,
       description,
       mealDate,
+      mealHour,
       isOnTheDiet,
     })
 
@@ -49,11 +51,11 @@ export async function mealsRoutes(app: FastifyInstance) {
 
     const params = getMealParamsSchema.parse(request.params)
 
-    const [user] = await knex('users')
+    const [user] = await knexConn('users')
       .where('id', request.user.sub)
       .select('id')
 
-    const meal = await knex('meals')
+    const meal = await knexConn('meals')
       .where('id', params.id)
       .andWhere('user_id', user.id)
       .first()
@@ -76,7 +78,7 @@ export async function mealsRoutes(app: FastifyInstance) {
 
     const params = updateMealParamsSchema.parse(request.params)
 
-    const [user] = await knex('users')
+    const [user] = await knexConn('users')
       .where('id', request.user.sub)
       .select('id')
 
@@ -90,7 +92,7 @@ export async function mealsRoutes(app: FastifyInstance) {
     const { name, description, mealDate, isOnTheDiet } =
       editMealBodySchema.parse(request.body)
 
-    const meal = await knex('meals')
+    const meal = await knexConn('meals')
       .where('id', params.id)
       .andWhere('user_id', user.id)
       .first()
@@ -117,11 +119,11 @@ export async function mealsRoutes(app: FastifyInstance) {
 
     const params = deleteMealParamsSchema.parse(request.params)
 
-    const [user] = await knex('users')
+    const [user] = await knexConn('users')
       .where('id', request.user.sub)
       .select('id')
 
-    const meal = await knex('meals')
+    const meal = await knexConn('meals')
       .where('id', params.id)
       .andWhere('user_id', user.id)
       .first()
@@ -137,22 +139,22 @@ export async function mealsRoutes(app: FastifyInstance) {
   })
 
   app.get('/summary', { onRequest: [verifyJWT] }, async (request) => {
-    const [user] = await knex('users')
+    const [user] = await knexConn('users')
       .where('id', request.user.sub)
       .select('id')
 
-    const [count] = await knex('meals')
+    const [count] = await knexConn('meals')
       .count('id', {
         as: 'Total de refeições registradas',
       })
       .where('user_id', user.id)
 
-    const refOnDiet = await knex('meals')
+    const refOnDiet = await knexConn('meals')
       .count('id', { as: 'onDiet' })
       .where('isOnTheDiet', true)
       .andWhere('user_id', user.id)
 
-    const refOutsideDiet = await knex('meals')
+    const refOutsideDiet = await knexConn('meals')
       .count('id', { as: 'outsideDiet' })
       .where('isOnTheDiet', false)
       .andWhere('user_id', user.id)

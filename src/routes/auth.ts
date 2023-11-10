@@ -1,7 +1,7 @@
 import { FastifyInstance } from 'fastify'
 import { randomUUID } from 'node:crypto'
 import { z } from 'zod'
-import { knex } from '../database'
+import { knexConn } from '../database'
 import { compare, hash } from 'bcrypt'
 
 export async function authRoutes(app: FastifyInstance) {
@@ -13,7 +13,10 @@ export async function authRoutes(app: FastifyInstance) {
 
     const { email, password } = loginBodySchema.parse(request.body)
 
-    const user = await knex('users').where('email', email).select('*').first()
+    const user = await knexConn('users')
+      .where('email', email)
+      .select('*')
+      .first()
 
     if (!user) {
       return reply.status(401).send({
@@ -64,7 +67,7 @@ export async function authRoutes(app: FastifyInstance) {
 
     const passwordHash = await hash(password, 10)
 
-    const checkUserExists = await knex('users')
+    const checkUserExists = await knexConn('users')
       .select('id')
       .where('email', email)
       .first()
@@ -75,7 +78,7 @@ export async function authRoutes(app: FastifyInstance) {
       })
     }
 
-    await knex('users').insert({
+    await knexConn('users').insert({
       id: randomUUID(),
       name,
       email,

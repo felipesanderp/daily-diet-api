@@ -1,6 +1,6 @@
 import { FastifyInstance } from 'fastify'
 import { z } from 'zod'
-import { knex } from '../database'
+import { knexConn } from '../database'
 import { hash } from 'bcrypt'
 import { verifyJWT } from '../middlewares/verify-jwt'
 
@@ -11,7 +11,7 @@ export async function profileRoutes(app: FastifyInstance) {
       onRequest: [verifyJWT],
     },
     async (request) => {
-      const [user] = await knex('users')
+      const [user] = await knexConn('users')
         .where('id', request.user.sub)
         .select('id', 'name', 'email')
 
@@ -40,14 +40,14 @@ export async function profileRoutes(app: FastifyInstance) {
       if (password) {
         const passwordHash = await hash(password, 10)
 
-        await knex('users').where('id', request.user.sub).update({
+        await knexConn('users').where('id', request.user.sub).update({
           password: passwordHash,
         })
 
         return response.status(202).send()
       }
 
-      await knex('users').where('id', request.user.sub).update({
+      await knexConn('users').where('id', request.user.sub).update({
         name,
         email,
       })
