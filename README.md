@@ -134,6 +134,13 @@ Se as informações forem atualizadas com sucesso, um retorno com o _response co
 
 ### :information_source: Executando a aplicação
 
+Abaixo, segue as instruções para rodar a aplicação.
+
+**1º**: Comece clonando este repositório:
+```bash 
+git clone https://github.com/felipesanderp/daily-diet-api.git
+```
+
 </details>
 
 <details>
