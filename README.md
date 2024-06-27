@@ -16,6 +16,35 @@ Essa aplicaça foi desenvolvida durante o curso de Node.js da [Rocketseat](https
 
 ## :twisted_rightwards_arrows: Rotas
 
+A aplicação conta com 10 rotas, separadas em `auth`, `meals` e `profile`.
+
+### auth
+
+As rotas de **auth** são responsáveis pela autenticação dos usuários da aplicação, separadas em duas rotas:
+
+`POST /login`: Rota responsável por realizar o _login_ do usuário. Recebe ***email*** e ***password*** do usuário, compara a senha do usuário com a senha salva no banco de dados e se estiver certo, devolve um objeto com um _token JWT_, contendo o _id_ do usuário no _sub_ e devolve as informaçãoes do usuário. Exemplo do objeto da resposta:
+```js
+{
+  token: string
+  user: {
+    id: string
+    email: string
+    name: string
+    created_at: string
+  }
+}  
+```
+
+`POST /register`: Utilizada para realizar o cadastro de um novo usuário. Recebe no _body_ o seguinte objeto: 
+```js 
+{
+  "name": "string",
+  "email": "string"
+  "password": "string"
+}
+```
+Após receber esse objeto com essas informações, a rota verifica se um usuário com o mesmo _e-mail_ ja existe no banco de dados, se já existe, retorna um erro. Se não existir, a senha do usuário é criptografada e salva no banco de dados com as demais infrmações passadas. Retorna um _status code_ `201 OK`, de sucesso.
+
 <details>
 <summary>Executando a aplicação</summary>
 
