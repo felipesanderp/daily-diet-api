@@ -134,6 +134,8 @@ Se as informações forem atualizadas com sucesso, um retorno com o _response co
 
 ### :information_source: Executando a aplicação
 
+Para rodar a aplicação, você precisa ter instalado no seu computador o Git, NPM ou um gerenciado de pacotes de sua preferência, um terminal e um editor de código, como o VSCode. 
+
 Abaixo, segue as instruções para rodar a aplicação.
 
 **1º**: Comece clonando este repositório:
@@ -141,6 +143,33 @@ Abaixo, segue as instruções para rodar a aplicação.
 git clone https://github.com/felipesanderp/daily-diet-api.git
 ```
 
+**2º** Acesse a pasta do projeto em um terminal de preferência própria:
+```bash 
+cd daily-diet-api
+```
+
+**3º** Ainda no terminal, instale as dependências do projeto, com um gerenciador de pacotes de preferência própria (aqui estou utilizando o *npm*):
+```bash 
+npm install
+```
+
+**4º** Agora, copie o arquivo `.env.example` na raiz do projeto:
+```bash 
+cp .env.example .env
+``` 
+Um novo arquivo deverá aparecer na raiz do projeto. Você deverá abri-lo utilizando um editor de texto ou código de sua preferência, como o Visual Studio Code e preencher as duas variáveis ambiente `DATABASE_URL` e `DATABASE_CLIENT`. Essas duas variáveis podem variar de acordo com o tipo do banco de dados escolhido: se escolher utilizar o SQLite, o `DATABASE_CLIENT` deverá ser preenchido com *"sqlite"* e a `DATABASE_URL` com algo como *"./db/app.db"*. Se escolher utilizar o PostgreSQL, o `DATABASE_CLIENT` deverá ser preenchido com *"pg"* e o `DATABASE_URL` com uma *string* de conexão do PostgreSQL aceita pelo Knex.js.
+
+**5º** Após terminar de instalar as dependências e configurar as variáveis ambiente, execute o comando abaixo no terminal para realizar as *migrations*, isto é, criar as tabelas no banco de dados:
+```bash 
+npm run knex migrate:latest
+```
+Uma mensagem de sucesso deverá aparecer no seu terminal, como `Batch 1 run: 2 migrations`
+
+**6º** Agora, é só executar a aplicação e testa-lá em uma ferramenta cliente de API's, como o [Insomnia](https://insomnia.rest/):
+```bash 
+npm run dev
+```
+A aplicação será executada na porta `3333`. Se acontecer algum erro de conflito nesta porta, você poderá modifica-lá no arquivo `index.ts` da pasta `env` ou parar a aplicação que já está utilizando essa porta.
 </details>
 
 <details>
