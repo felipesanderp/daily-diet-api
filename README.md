@@ -22,7 +22,7 @@ A aplicação conta com 10 rotas, separadas em `auth`, `meals` e `profile`.
 
 As rotas de **auth** são responsáveis pela autenticação dos usuários da aplicação, separadas em duas rotas:
 
-`POST /login`: Rota responsável por realizar o _login_ do usuário. Recebe ***email*** e ***password*** do usuário, compara a senha do usuário com a senha salva no banco de dados e se estiver certo, devolve um objeto com um _token JWT_, contendo o _id_ do usuário no _sub_ e devolve as informaçãoes do usuário. Exemplo do objeto da resposta:
+`POST /auth/login`: Rota responsável por realizar o _login_ do usuário. Recebe ***email*** e ***password*** do usuário, compara a senha do usuário com a senha salva no banco de dados e se estiver certo, devolve um objeto com um _token JWT_, contendo o _id_ do usuário no _sub_ e devolve as informaçãoes do usuário. Exemplo do objeto da resposta:
 ```js
 {
   token: string
@@ -35,7 +35,7 @@ As rotas de **auth** são responsáveis pela autenticação dos usuários da apl
 }  
 ```
 
-`POST /register`: Utilizada para realizar o cadastro de um novo usuário. Recebe no _body_ o seguinte objeto: 
+`POST /auth/register`: Utilizada para realizar o cadastro de um novo usuário. Recebe no _body_ o seguinte objeto: 
 ```js 
 {
   "name": "string",
@@ -49,7 +49,7 @@ Após receber esse objeto com essas informações, a rota verifica se um usuári
 
 As rotas de **meals** gerenciam as operações da aplicação relacionadas as refeições do usuário. Todas as rotas são protegidas, ou seja, o usuário deve estar logado para utiliza-lás.
 
-`GET /`: Rota que retorna todas as _meals_ do usuário, com o seguinte formato:
+`GET /meals`: Rota que retorna todas as _meals_ do usuário, com o seguinte formato:
 ```js 
 {
   id: string;
@@ -63,7 +63,7 @@ As rotas de **meals** gerenciam as operações da aplicação relacionadas as re
 }[]
 ```
 
-`POST /`: Utilizada para criar uma nova _meal_. Recebe no _body_ as seguintes informações:
+`POST /meals`: Utilizada para criar uma nova _meal_. Recebe no _body_ as seguintes informações:
 ```js 
 {
   "name": "string",
@@ -75,7 +75,7 @@ As rotas de **meals** gerenciam as operações da aplicação relacionadas as re
 ```
 Após inserir os dados no banco de dados, retorna um _status code_ `201 OK`, de sucesso.
 
-`GET /:id`: Utilizada para retornar as informções de uma única _meal_. Recebe via _params_ o _id_ de uma _meal_ e busca no banco de dados se ela existe. Retona um objeto com as informações da _meal_, se encontrada:
+`GET /meals/:id`: Utilizada para retornar as informções de uma única _meal_. Recebe via _params_ o _id_ de uma _meal_ e busca no banco de dados se ela existe. Retona um objeto com as informações da _meal_, se encontrada:
 ```js
 {
   id: string;
@@ -89,7 +89,7 @@ Após inserir os dados no banco de dados, retorna um _status code_ `201 OK`, de 
 }
 ```
 
-`PUT /:id`: Rota para atualizar uma _meal_. Recebe via _params_ o _id_ de uma _meal_ e via _body_ uma objeto no seguinte formato:
+`PUT /meals/:id`: Rota para atualizar uma _meal_. Recebe via _params_ o _id_ de uma _meal_ e via _body_ uma objeto no seguinte formato:
 ```js 
 {
   "name": "string",
@@ -100,7 +100,7 @@ Após inserir os dados no banco de dados, retorna um _status code_ `201 OK`, de 
 ```
 Após salvar as informações,  retorna um _status code_ `202 OK`, de sucesso.
 
-`DELETE /:id`: Rota utilizada para deletar uma _meal_ . Recebe via _params_ o _id_ de uma _meal_ e busca no banco de dados se ela existe e se ela pertence ao usuário logado. Se o usuário não tiver permissão para deletar a _meal_, ou seja, ela não pertence a ele,
+`DELETE /meals/:id`: Rota utilizada para deletar uma _meal_ . Recebe via _params_ o _id_ de uma _meal_ e busca no banco de dados se ela existe e se ela pertence ao usuário logado. Se o usuário não tiver permissão para deletar a _meal_, ou seja, ela não pertence a ele,
 é retornado um _status code_ `401 Unauthorized`. Se pertencer a ele, a _meal_ é deletada do banco de dados.
 
 `GET /summary`: Rota que trás um resumo das refeições do usuário, com as seguintes informações: ***totalMeals***, o total de refeições que o usuário tem registrado no banco de dados; ***totalOnTheDiet***, total de refeições do usuário que estão na dieta; ***totalOutsideTheDiet***, total de refeições que estão fora da dieta.
