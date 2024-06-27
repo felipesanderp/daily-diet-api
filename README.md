@@ -88,7 +88,9 @@ Após inserir os dados no banco de dados, retorna um _status code_ `201 OK`, de 
 ```
 Após salvar as informações,  retorna um _status code_ `202 OK`, de sucesso.
 
-`DELETE /:id`: 
+`DELETE /:id`: Rota utilizada para deletar uma _meal_ . Recebe via _params_ o _id_ de uma _meal_ e busca no banco de dados se ela existe e se ela pertence ao usuário logado. Se o usuário não tiver permissão para deletar a _meal_, ou seja, ela não pertence a ele
+é retornado um _status code_ `401 Unauthorized`. Se pertencer a ele, a _meal_ é deletada do banco de dados.
+
 <details>
 <summary>Executando a aplicação</summary>
 
