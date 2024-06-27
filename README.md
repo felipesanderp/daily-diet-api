@@ -1,8 +1,18 @@
 # Daily Diet API
 
-Foi desenvolvida durante o curso de Node.js da [Rocketseat](https://www.rocketseat.com.br/).
+Controle sua dieta diária.
+
+Essa aplicaça foi desenvolvida durante o curso de Node.js da [Rocketseat](https://www.rocketseat.com.br/).
 
 ## :rocket: Tecnologias
+
+- [Node.js](https://nodejs.org/en)
+- [Fastify](https://fastify.dev/)
+  [Fastify JWT](https://github.com/fastify/fastify-jwt)
+- [Knex.js](https://knexjs.org/)
+- [Zod](https://zod.dev/)
+- [TypeScript](https://www.typescriptlang.org)
+- [bcryptjs](https://www.npmjs.com/package/bcryptjs)
 
 ## :twisted_rightwards_arrows: Rotas
 
