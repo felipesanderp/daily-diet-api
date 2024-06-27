@@ -1,3 +1,21 @@
+# Daily Diet API
+
+Foi desenvolvida durante o curso de Node.js da [Rocketseat](https://www.rocketseat.com.br/).
+
+## :rocket: Tecnologias
+
+## :twisted_rightwards_arrows: Rotas
+
+<details>
+<summary>Executando a aplicação</summary>
+
+### :information_source: Executando a aplicação
+
+</details>
+
+<details>
+<summary>Requisitos</summary>
+
 ## Regras da aplicação
 
 - [ ] Deve ser possível criar um usuário
@@ -17,3 +35,6 @@
   - [ ] Quantidade total de refeições fora da dieta
   - [ ] Melhor sequência de refeições dentro da dieta
 - [ ] O usuário só pode visualizar, editar e apagar as refeições o qual ele criou
+</details>
+
+
