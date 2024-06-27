@@ -8,7 +8,7 @@ Essa aplicaça foi desenvolvida durante o curso de Node.js da [Rocketseat](https
 
 - [Node.js](https://nodejs.org/en)
 - [Fastify](https://fastify.dev/)
-  [Fastify JWT](https://github.com/fastify/fastify-jwt)
+- [Fastify JWT](https://github.com/fastify/fastify-jwt)
 - [Knex.js](https://knexjs.org/)
 - [Zod](https://zod.dev/)
 - [TypeScript](https://www.typescriptlang.org)
