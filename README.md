@@ -75,7 +75,19 @@ As rotas de **meals** gerenciam as operações da aplicação relacionadas as re
 ```
 Após inserir os dados no banco de dados, retorna um _status code_ `201 OK`, de sucesso.
 
-`GET /:id`: Utilizada para retornar as informções de uma única _meal_. Recebe via _params_ o _id_ de uma _meal_ e busca no banco de dados se ela existe.
+`GET /:id`: Utilizada para retornar as informções de uma única _meal_. Recebe via _params_ o _id_ de uma _meal_ e busca no banco de dados se ela existe. Retona um objeto com as informações da _meal_, se encontrada:
+```js
+{
+  id: string;
+  user_id: string;
+  name: string;
+  description: string;
+  mealDate: string;
+  mealHour: string;
+  isOnTheDiet: boolean;
+  created_at: string;
+}
+```
 
 `PUT /:id`: Rota para atualizar uma _meal_. Recebe via _params_ o _id_ de uma _meal_ e via _body_ uma objeto no seguinte formato:
 ```js 
@@ -88,8 +100,34 @@ Após inserir os dados no banco de dados, retorna um _status code_ `201 OK`, de 
 ```
 Após salvar as informações,  retorna um _status code_ `202 OK`, de sucesso.
 
-`DELETE /:id`: Rota utilizada para deletar uma _meal_ . Recebe via _params_ o _id_ de uma _meal_ e busca no banco de dados se ela existe e se ela pertence ao usuário logado. Se o usuário não tiver permissão para deletar a _meal_, ou seja, ela não pertence a ele
+`DELETE /:id`: Rota utilizada para deletar uma _meal_ . Recebe via _params_ o _id_ de uma _meal_ e busca no banco de dados se ela existe e se ela pertence ao usuário logado. Se o usuário não tiver permissão para deletar a _meal_, ou seja, ela não pertence a ele,
 é retornado um _status code_ `401 Unauthorized`. Se pertencer a ele, a _meal_ é deletada do banco de dados.
+
+`GET /summary`: Rota que trás um resumo das refeições do usuário, com as seguintes informações: ***totalMeals***, o total de refeições que o usuário tem registrado no banco de dados; ***totalOnTheDiet***, total de refeições do usuário que estão na dieta; ***totalOutsideTheDiet***, total de refeições que estão fora da dieta.
+
+### [profile](https://github.com/felipesanderp/daily-diet-api/blob/main/src/routes/profile.ts)
+
+As rotas de **profile** são responsáveis por trazer e atualizar informações do perfil do usuário.
+
+`GET /profile`: Esta rota busca e devolve as informações do perfil do usuário. Utiliza do _id_ presente no JWT, que é gerado após fazer _login_ para buscar as informações no banco de dados. Retorna um objeto no seguinte formato:
+```js 
+{
+  id: string
+  name: string
+  email: string
+}
+```
+
+`PUT /profile`: Utilizada para atualizar as informações do perfil do usuário. Utiliza do _id_ presente no JWT, que é gerado após fazer _login_ para buscar as informações no banco de dados e pode receber no _body_ as seguintes informações:
+```js 
+{
+  "name": "string"
+  "email": "string"
+  "password": "string"
+}
+```
+
+Se as informações forem atualizadas com sucesso, um retorno com o _response code_ `202` é enviado.
 
 <details>
 <summary>Executando a aplicação</summary>
