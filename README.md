@@ -45,6 +45,50 @@ As rotas de **auth** são responsáveis pela autenticação dos usuários da apl
 ```
 Após receber esse objeto com essas informações, a rota verifica se um usuário com o mesmo _e-mail_ ja existe no banco de dados, se já existe, retorna um erro. Se não existir, a senha do usuário é criptografada e salva no banco de dados com as demais infrmações passadas. Retorna um _status code_ `201 OK`, de sucesso.
 
+### [meals](https://github.com/felipesanderp/daily-diet-api/blob/main/src/routes/meals.ts)
+
+As rotas de **meals** gerenciam as operações da aplicação relacionadas as refeições do usuário. Todas as rotas são protegidas, ou seja, o usuário deve estar logado para utiliza-lás.
+
+`GET /`: Rota que retorna todas as _meals_ do usuário, com o seguinte formato:
+```js 
+{
+  id: string;
+  user_id: string;
+  name: string;
+  description: string;
+  mealDate: string;
+  mealHour: string;
+  isOnTheDiet: boolean;
+  created_at: string;
+}[]
+```
+
+`POST /`: Utilizada para criar uma nova _meal_. Recebe no _body_ as seguintes informações:
+```js 
+{
+  "name": "string",
+  "description": "string"
+  "mealDate": "string"
+  "mealHour": "string"
+  "isOnTheDiet": boolean
+}
+```
+Após inserir os dados no banco de dados, retorna um _status code_ `201 OK`, de sucesso.
+
+`GET /:id`: Utilizada para retornar as informções de uma única _meal_. Recebe via _params_ o _id_ de uma _meal_ e busca no banco de dados se ela existe.
+
+`PUT /:id`: Rota para atualizar uma _meal_. Recebe via _params_ o _id_ de uma _meal_ e via _body_ uma objeto no seguinte formato:
+```js 
+{
+  "name": "string",
+  "description": "string"
+  "mealDate": "string"
+  "isOnTheDiet": boolean
+}
+```
+Após salvar as informações,  retorna um _status code_ `202 OK`, de sucesso.
+
+`DELETE /:id`: 
 <details>
 <summary>Executando a aplicação</summary>
 
