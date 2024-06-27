@@ -18,7 +18,7 @@ Essa aplicaça foi desenvolvida durante o curso de Node.js da [Rocketseat](https
 
 A aplicação conta com 10 rotas, separadas em `auth`, `meals` e `profile`.
 
-### auth
+### [auth](https://github.com/felipesanderp/daily-diet-api/blob/main/src/routes/auth.ts)
 
 As rotas de **auth** são responsáveis pela autenticação dos usuários da aplicação, separadas em duas rotas:
 
