@@ -47,4 +47,8 @@ Essa aplicaça foi desenvolvida durante o curso de Node.js da [Rocketseat](https
 - [ ] O usuário só pode visualizar, editar e apagar as refeições o qual ele criou
 </details>
 
+## :memo: License
+This project is under the MIT license. See the [LICENSE](https://github.com/felipesanderp/daily-diet-api/blob/main/LICENSE) for more information.
+---
 
+Made with ♥ by Felipe Sander :wave: [Get in touch!](https://www.linkedin.com/in/felipesander)
